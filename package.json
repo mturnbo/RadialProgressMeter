@@ -1,6 +1,6 @@
 {
   "name": "radial-progress-meter",
-  "description": "Radial progress meter using D3.js",
+  "description": "Radial progress meter using SVG",
   "version": "0.1.0",
   "main": "index.js",
   "scripts": {
@@ -10,14 +10,11 @@
   "keywords": [
     "radial",
     "progress",
-    "chart",
-    "d3"
+    "meter",
+    "svg"
   ],
   "author": "Marcus E. Turnbo",
   "license": "ISC",
-  "dependencies": {
-    "d3": "^4.2.7"
-  },
   "devDependencies": {
     "mocha": "^3.1.2",
     "webpack": "^1.13.2"

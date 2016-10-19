@@ -1,0 +1,25 @@
+{
+  "name": "radial-progress-meter",
+  "description": "Radial progress meter using D3.js",
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "radial",
+    "progress",
+    "chart",
+    "d3"
+  ],
+  "author": "Marcus E. Turnbo",
+  "license": "ISC",
+  "dependencies": {
+    "d3": "^4.2.7"
+  },
+  "devDependencies": {
+    "mocha": "^3.1.2",
+    "webpack": "^1.13.2"
+  }
+}

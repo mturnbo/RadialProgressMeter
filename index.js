@@ -1,7 +1,7 @@
 function RadialProgressMeter(backgroundElement, progressElement, options) {
 
   var self = this;
-  self.options = options;
+  self.options = validateOptions(options);
 
   function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
     var angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
@@ -30,9 +30,11 @@ function RadialProgressMeter(backgroundElement, progressElement, options) {
     }
 
     return {
+      centerX: options.centerX || 150,
+      centerY: options.centerY || 150,
       radius: options.radius || 100,
       stroke: {
-        width: options.stroke && options.stroke.width || 40,
+        width: options.stroke && options.stroke.width || 25,
         gap: options.stroke && options.stroke.gap || 2
       },
       animation: {

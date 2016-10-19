@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Radial Progress Meter</title>
+</head>
+<body>
+
+<div id="progressMeter"></div>
+
+<script src="index.js"></script>
+<script>
+
+    var meter = new RadialProgressMeter('progressMeter', {
+        centerX: 150,
+        centerY: 150,
+        radius: 100,
+        startAngle: -130,
+        endAngle: 130,
+        stroke: 20,
+        colors: {
+            background: '#DEDEDE',
+            meterStart: '#2DA4D8',
+            meterStop: '#8CDAF9'
+        },
+        progress: .75
+    });
+
+</script>
+
+</body>
+</html>

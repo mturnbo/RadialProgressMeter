@@ -16,13 +16,13 @@ function RadialProgressMeter(element, options) {
 
   function arcAttributes(x, y, radius, startAngle, endAngle) {
 
-    var start = polarToCartesian(x, y, radius, endAngle);
-    var end = polarToCartesian(x, y, radius, startAngle);
+    var start = polarToCartesian(x, y, radius, startAngle);
+    var end = polarToCartesian(x, y, radius, endAngle);
     var isLargeArc = endAngle - startAngle <= 180 ? "0" : "1";
 
     return [
       "M", start.x, start.y,
-      "A", radius, radius, 0, isLargeArc, 0, end.x, end.y
+      "A", radius, radius, 0, isLargeArc, 1, end.x, end.y
     ].join(" ");
   }
 
@@ -54,24 +54,30 @@ function RadialProgressMeter(element, options) {
     };
   }
 
+  function makeGradient(id, colorStart, colorEnd) {
+    var grad = document.createElementNS(svgns, 'linearGradient');
+    grad.setAttribute('id', id);
+
+    var startStop = document.createElementNS(svgns, 'stop');
+    startStop.setAttribute('offset', '0%');
+    startStop.setAttribute('stop-color', colorStart);
+    grad.appendChild(startStop);
+
+    var endStop = document.createElementNS(svgns, 'stop');
+    endStop.setAttribute('offset', '100%');
+    endStop.setAttribute('stop-color', colorEnd);
+    grad.appendChild(endStop);
+
+    return grad;
+  }
+
   // create svg element
   this.svg = document.createElementNS(svgns, 'svg');
   this.svg.setAttribute('width', this.options.width);
   this.svg.setAttribute('height', this.options.height);
 
   // gradient
-  var grad = document.createElementNS(svgns, 'linearGradient');
-  grad.setAttribute('id', 'gradProgress');
-
-  var startStop = document.createElementNS(svgns, 'stop');
-  startStop.setAttribute('offset', '0%');
-  startStop.setAttribute('stop-color', this.options.colors.meterStart);
-  grad.appendChild(startStop);
-
-  var endStop = document.createElementNS(svgns, 'stop');
-  endStop.setAttribute('offset', '100%');
-  endStop.setAttribute('stop-color', this.options.colors.meterStop);
-  grad.appendChild(endStop);
+  var grad = makeGradient('gradProgress', this.options.colors.meterStart,  this.options.colors.meterStop);
 
   var defs = document.createElementNS(svgns,'defs')
   defs.appendChild(grad);
@@ -79,7 +85,8 @@ function RadialProgressMeter(element, options) {
   this.svg.insertBefore(defs, this.svg.firstChild);
 
   // background arc
-  this.meterBackground = document.createElementNS(this.svg.namespaceURI, 'path');
+  this.meterBackground = document.createElementNS(svgns, 'path');
+  this.meterBackground.setAttribute('id', 'meterBackground');
   this.meterBackground.setAttribute("d", arcAttributes(
       self.options.centerX,
       self.options.centerY,
@@ -96,7 +103,8 @@ function RadialProgressMeter(element, options) {
 
   // progress arc
   var progressAngle = self.options.progress * (self.options.endAngle - self.options.startAngle) + self.options.startAngle;
-  this.meterProgress = document.createElementNS(this.svg.namespaceURI, 'path');
+  this.meterProgress = document.createElementNS(svgns, 'path');
+  this.meterProgress.setAttribute('id', 'meterProgress');
   this.meterProgress.setAttribute("d", arcAttributes(
       self.options.centerX,
       self.options.centerY,
@@ -108,10 +116,28 @@ function RadialProgressMeter(element, options) {
   this.meterProgress.style.stroke = 'url(#gradProgress)';
   this.meterProgress.style.strokeWidth = this.options.stroke;
   this.meterProgress.style.strokeLinecap = 'round';
+  this.meterProgress.style.strokeDasharray = '';
+  this.meterProgress.style.strokeDashoffset = '0.00';
 
   this.svg.appendChild(this.meterProgress);
 
   document.getElementById(element).appendChild(this.svg);
+
+  // animate progress
+  var progressPath = document.getElementById('meterProgress');
+  var length = progressPath.getTotalLength();
+
+  progressPath.style.transition = progressPath.style.WebkitTransition = 'none';
+  progressPath.style.strokeDasharray = length + ' ' + length;
+  progressPath.style.strokeDashoffset = length;
+
+  progressPath.getBoundingClientRect();
+
+  progressPath.style.transition = progressPath.style.WedkitTransition = 'stroke-dashoffset '
+      + this.options.animation.duration + 'ms ease-out';
+
+  progressPath.style.strokeDashoffset = '0';
+
 
 }
 

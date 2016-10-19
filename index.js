@@ -33,6 +33,8 @@ function RadialProgressMeter(element, options) {
     }
 
     return {
+      width: options.width || 400,
+      height: options.height || 400,
       centerX: options.centerX || 150,
       centerY: options.centerY || 150,
       radius: options.radius || 100,
@@ -54,8 +56,8 @@ function RadialProgressMeter(element, options) {
 
   // create svg element
   this.svg = document.createElementNS(svgns, 'svg');
-  this.svg.setAttribute('width', 400);
-  this.svg.setAttribute('height', 400);
+  this.svg.setAttribute('width', this.options.width);
+  this.svg.setAttribute('height', this.options.height);
 
   // gradient
   var grad = document.createElementNS(svgns, 'linearGradient');

@@ -1,4 +1,4 @@
-function RadialProgressMeter(element, options) {
+function RadialProgressMeter(options) {
 
   var self = this;
   var svgns = "http://www.w3.org/2000/svg"

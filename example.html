@@ -27,7 +27,7 @@
 
 <div class="progress-meter-container">
     <div id="progressMeter"></div>
-    <div id="progressStatus"> 1 hr 47 min</div>
+    <div id="progressStatus"> 75% </div>
 </div>
 
 
@@ -48,11 +48,11 @@
             meterStart: '#1C93C5',
             meterStop: '#8CDAF9'
         },
-        animation: {
-            duration: 1250
-        },
         progress: .75
     });
+
+    document.getElementById('progressMeter').appendChild(meter.svg);
+    meter.animate(1250, 250);
 
 </script>
 

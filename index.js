@@ -39,10 +39,6 @@ function RadialProgressMeter(element, options) {
       centerY: options.centerY || 150,
       radius: options.radius || 100,
       stroke: options.stroke || 25,
-      animation: {
-        duration: options.animation && options.animation.duration || 1750,
-        delay: options.animation && options.animation.delay || 200
-      },
       startAngle: options.startAngle || -120,
       endAngle: options.endAngle || 120,
       progress: options.progress || 0,
@@ -85,78 +81,60 @@ function RadialProgressMeter(element, options) {
   self.svg.insertBefore(defs, self.svg.firstChild);
 
   // background arc
-  self.meterBackground = document.createElementNS(svgns, 'path');
-  self.meterBackground.setAttribute('id', 'meterBackground');
-  self.meterBackground.setAttribute("d", arcAttributes(
+  var meterBackground = document.createElementNS(svgns, 'path');
+  meterBackground.setAttribute('id', 'meterBackground');
+  meterBackground.setAttribute("d", arcAttributes(
       self.options.centerX,
       self.options.centerY,
       self.options.radius,
       self.options.startAngle,
       self.options.endAngle
   ));
-  self.meterBackground.style.fill = 'none';
-  self.meterBackground.style.stroke = self.options.colors.background;
-  self.meterBackground.style.strokeWidth = self.options.stroke;
-  self.meterBackground.style.strokeLinecap = 'round';
+  meterBackground.style.fill = 'none';
+  meterBackground.style.stroke = self.options.colors.background;
+  meterBackground.style.strokeWidth = self.options.stroke;
+  meterBackground.style.strokeLinecap = 'round';
 
-  self.svg.appendChild(self.meterBackground);
+  self.svg.appendChild(meterBackground);
 
   // progress arc
   var progressAngle = self.options.progress * (self.options.endAngle - self.options.startAngle) + self.options.startAngle;
-  self.meterProgress = document.createElementNS(svgns, 'path');
-  self.meterProgress.setAttribute('id', 'meterProgress');
-  self.meterProgress.setAttribute("d", arcAttributes(
+  var meterProgress = document.createElementNS(svgns, 'path');
+  meterProgress.setAttribute('id', 'meterProgress');
+  meterProgress.setAttribute("d", arcAttributes(
       self.options.centerX,
       self.options.centerY,
       self.options.radius,
       self.options.startAngle,
       progressAngle
   ));
-  self.meterProgress.style.fill = 'none';
-  self.meterProgress.style.stroke = 'url(#gradProgress)';
-  self.meterProgress.style.strokeWidth = self.options.stroke;
-  self.meterProgress.style.strokeLinecap = 'round';
-  self.meterProgress.style.strokeDasharray = '';
-  self.meterProgress.style.strokeDashoffset = '0.00';
+  meterProgress.style.fill = 'none';
+  meterProgress.style.stroke = 'url(#gradProgress)';
+  meterProgress.style.strokeWidth = self.options.stroke;
+  meterProgress.style.strokeLinecap = 'round';
+  meterProgress.style.strokeDasharray = '';
+  meterProgress.style.strokeDashoffset = '0.00';
 
-  var length = self.meterProgress.getTotalLength();
+  self.svg.appendChild(meterProgress);
+}
 
-  self.meterProgress.style.transition = self.meterProgress.style.WebkitTransition = 'none';
-  self.meterProgress.style.strokeDasharray = length + ' ' + length;
-  self.meterProgress.style.strokeDashoffset = length;
 
-  self.meterProgress.getBoundingClientRect();
+RadialProgressMeter.prototype.animate = function (duration, delay) {
+  var self = this;
 
-  self.meterProgress.style.transition = self.meterProgress.style.WedkitTransition = 'stroke-dashoffset '
-      + self.options.animation.duration + 'ms ease-out';
-  self.meterProgress.style.transitionDelay = '2s';
+  var meter = self.svg.lastChild;
+  var length = meter.getTotalLength();
 
-  self.meterProgress.style.strokeDashoffset = '0';
+  meter.style.transition = meter.style.WebkitTransition = 'none';
+  meter.style.strokeDasharray = length + ' ' + length;
+  meter.style.strokeDashoffset = length;
 
-  self.svg.appendChild(self.meterProgress);
+  meter.getBoundingClientRect();
 
-  self.svg.appendChild(self.meterProgress);
-
-  document.getElementById(element).appendChild(self.svg);
-
-  /*
-  // animate progress
-  var progressPath = document.getElementById('meterProgress');
-  var length = progressPath.getTotalLength();
-  console.log(length);
-
-  progressPath.style.transition = progressPath.style.WebkitTransition = 'none';
-  progressPath.style.strokeDasharray = length + ' ' + length;
-  progressPath.style.strokeDashoffset = length;
-
-  progressPath.getBoundingClientRect();
-
-  progressPath.style.transition = progressPath.style.WedkitTransition = 'stroke-dashoffset '
-      + self.options.animation.duration + 'ms ease-out';
-
-  progressPath.style.strokeDashoffset = '0';
-  */
-
+  meter.style.transition = meter.style.WedkitTransition = 'stroke-dashoffset '
+      + duration + 'ms ease-out';
+  meter.style.transitionDelay = delay || 0 + 'ms';
+  meter.style.strokeDashoffset = '0';
 }
 
 if (typeof module !== 'undefined') module.exports = RadialProgressMeter;

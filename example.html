@@ -4,17 +4,39 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>Radial Progress Meter</title>
+
+    <style>
+        .progress-meter-container {
+            display: inline-block;
+            position: relative;
+        }
+        #progressStatus {
+            text-align: center;
+            font-size: 26px;
+            z-index: 10;
+            position: absolute;
+            width: 50%;
+            height: 25%;
+            top: 40%;
+            left: 25%;
+        }
+    </style>
+
 </head>
 <body>
 
-<div id="progressMeter"></div>
+<div class="progress-meter-container">
+    <div id="progressMeter"></div>
+    <div id="progressStatus"> 1 hr 47 min</div>
+</div>
+
 
 <script src="index.js"></script>
 <script>
 
     var meter = new RadialProgressMeter('progressMeter', {
-        width: 400,
-        height: 400,
+        width: 300,
+        height: 300,
         centerX: 150,
         centerY: 150,
         radius: 100,
@@ -23,8 +45,11 @@
         stroke: 20,
         colors: {
             background: '#DEDEDE',
-            meterStart: '#2DA4D8',
+            meterStart: '#1C93C5',
             meterStop: '#8CDAF9'
+        },
+        animation: {
+            duration: 1250
         },
         progress: .75
     });

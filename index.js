@@ -33,8 +33,8 @@ function RadialProgressMeter(element, options) {
     }
 
     return {
-      width: options.width || 400,
-      height: options.height || 400,
+      width: options.width || 300,
+      height: options.height || 300,
       centerX: options.centerX || 150,
       centerY: options.centerY || 150,
       radius: options.radius || 100,
@@ -119,13 +119,31 @@ function RadialProgressMeter(element, options) {
   self.meterProgress.style.strokeDasharray = '';
   self.meterProgress.style.strokeDashoffset = '0.00';
 
+  var length = self.meterProgress.getTotalLength();
+
+  self.meterProgress.style.transition = self.meterProgress.style.WebkitTransition = 'none';
+  self.meterProgress.style.strokeDasharray = length + ' ' + length;
+  self.meterProgress.style.strokeDashoffset = length;
+
+  self.meterProgress.getBoundingClientRect();
+
+  self.meterProgress.style.transition = self.meterProgress.style.WedkitTransition = 'stroke-dashoffset '
+      + self.options.animation.duration + 'ms ease-out';
+  self.meterProgress.style.transitionDelay = '2s';
+
+  self.meterProgress.style.strokeDashoffset = '0';
+
+  self.svg.appendChild(self.meterProgress);
+
   self.svg.appendChild(self.meterProgress);
 
   document.getElementById(element).appendChild(self.svg);
 
+  /*
   // animate progress
   var progressPath = document.getElementById('meterProgress');
   var length = progressPath.getTotalLength();
+  console.log(length);
 
   progressPath.style.transition = progressPath.style.WebkitTransition = 'none';
   progressPath.style.strokeDasharray = length + ' ' + length;
@@ -137,7 +155,7 @@ function RadialProgressMeter(element, options) {
       + self.options.animation.duration + 'ms ease-out';
 
   progressPath.style.strokeDashoffset = '0';
-
+  */
 
 }
 
